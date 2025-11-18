@@ -1,17 +1,13 @@
-# app/main.py
-import random
+import secrets
+import ast
+import os
 
-SECRET_API_KEY = "supersecretpassword123"   # hardcoded secret (insecure)
+# read secret from env instead of hardcoding
+SECRET_API_KEY = os.environ.get("SECRET_API_KEY", None)
 
 def generate_token():
-    # insecure pseudo-random token
-    return str(random.random())
+    return secrets.token_hex(16)
 
 def evaluate_user_input(s):
-    # insecure: use of eval on user-provided input
-    return eval(s)
-
-if __name__ == "__main__":
-    print("Token:", generate_token())
-    user = "2 + 2"
-    print("Eval:", evaluate_user_input(user))
+    # safer if we only accept literals:
+    return ast.literal_eval(s)
